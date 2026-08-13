@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Cormorant_Garamond } from "next/font/google";
+import { Inter } from "next/font/google"; // 👈 Cormorant_Garamond removed from here
 import { site } from "@/config/site";
 import { ALLOW_THEME_QUERY, THEME, themeNames } from "@/config/theme";
 import "./globals.css";
@@ -7,13 +7,6 @@ import "./globals.css";
 const body = Inter({
   subsets: ["latin", "cyrillic"],
   variable: "--font-body",
-  display: "swap",
-});
-
-const display = Cormorant_Garamond({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500"],
-  variable: "--font-display",
   display: "swap",
 });
 
@@ -61,8 +54,16 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // Весь внешний вид сайта — одно слово в src/config/theme.ts
-    <html lang="ru" data-theme={THEME} className={`${body.variable} ${display.variable}`}>
+    <html lang="ru" data-theme={THEME} className={body.variable}>
+      <head>
+        {/* Load Cormorant Garamond directly via CDN */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>
         {ALLOW_THEME_QUERY && (
           <script dangerouslySetInnerHTML={{ __html: themeQueryScript }} />
