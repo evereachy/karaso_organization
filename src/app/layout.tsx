@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: THEME === "garage" ? "#121316" : THEME === "asphalt" ? "#faf8f5" : "#ffffff",
+  themeColor: THEME === "carbon" ? "#121316" : THEME === "studio" ? "#faf8f5" : "#ffffff",
   width: "device-width",
   initialScale: 1,
   // maximumScale НЕ ограничиваем — иначе ломаем зум для слабовидящих
