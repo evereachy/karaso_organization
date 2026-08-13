@@ -1,0 +1,483 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   СЛОЙ 1 — ДИЗАЙН-ТОКЕНЫ
+   Единственное место, где живёт визуал.
+   Чтобы натянуть другой дизайн клиента — правим только этот блок.
+   ============================================================ */
+:root {
+  /* цвет */
+  --c-bg: #ffffff;
+  --c-surface: #f7f6f3;
+  --c-elevated: #ffffff;
+  --c-line: #e8e4dd;
+  --c-ink: #1b1a18;
+  --c-muted: #7c766d;
+  --c-accent: #1b1a18;
+  --c-accent-ink: #ffffff;
+
+  /* форма */
+  --r-card: 24px;
+  --r-control: 14px;
+  --r-pill: 999px;
+
+  /* тень */
+  --sh-soft: 0 1px 2px rgba(20, 18, 15, 0.04), 0 10px 30px -18px rgba(20, 18, 15, 0.25);
+  --sh-lift: 0 2px 4px rgba(20, 18, 15, 0.05), 0 18px 40px -20px rgba(20, 18, 15, 0.35);
+
+  /* типографика */
+  --f-display: var(--font-display), Georgia, serif;
+  --f-body: var(--font-body), system-ui, -apple-system, sans-serif;
+
+  /* сетка */
+  --w-container: 1120px;
+  --pad-x: 20px;
+  --gap-section: 72px;
+
+  /* движение */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 300ms;
+
+  /* характер темы */
+  --f-display-weight: 500;
+  --f-display-tracking: -0.02em;
+  --eyebrow-tracking: 0.18em;
+  --img-filter: none;
+  --img-filter-hover: none;
+  --deco-opacity: 0;
+
+  /* Второй акцент — только для градиентов. Плоская заливка
+     кнопок в 2026 читается как шаблон десятилетней давности */
+  --c-accent-2: var(--c-accent);
+  --grad-accent: linear-gradient(135deg, var(--c-accent), var(--c-accent-2));
+
+  /* Стекло. Используется точечно: липкие панели и навбар */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-blur: 20px;
+  --glass-line: rgba(255, 255, 255, 0.5);
+
+  /* Кольцо вокруг активных элементов вместо жирной рамки */
+  --ring: 0 0 0 3px rgba(0, 0, 0, 0.08);
+
+  /* Зерно поверх фона — снимает цифровую стерильность */
+  --grain-opacity: 0;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --pad-x: 32px;
+    --gap-section: 120px;
+  }
+}
+
+/* ============================================================
+   ТРИ СОВРЕМЕННЫХ СТИЛЯ.
+   Переключаются одним словом: <html data-theme="...">
+   Меняют цвет, форму, шрифт, тени, фон и характер движения.
+   ============================================================ */
+
+/* --- CARBON: тёмный перформанс --------------------------------
+   Почти чёрный с синим подтоном, кислотно-лаймовый акцент,
+   стеклянные поверхности и свечение. Язык тюнинга и
+   современных приборных панелей. */
+[data-theme="carbon"] {
+  --c-bg: #0a0b0d;
+  --c-surface: #121418;
+  --c-elevated: #16191e;
+  --c-line: #23272e;
+  --c-ink: #f4f6f8;
+  --c-muted: #868f9c;
+  --c-accent: #c8f751;
+  --c-accent-2: #7de88a;
+  --c-accent-ink: #0a0b0d;
+
+  --r-card: 20px;
+  --r-control: 12px;
+
+  /* Свечение вместо падающей тени: на чёрном тень не читается,
+     а подсветка даёт ощущение работающего оборудования */
+  --sh-soft: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 18px 40px -28px rgba(0, 0, 0, 1);
+  --sh-lift: 0 0 0 1px rgba(200, 247, 81, 0.22), 0 0 44px -14px rgba(200, 247, 81, 0.28),
+    0 28px 56px -30px rgba(0, 0, 0, 1);
+
+  --glass-bg: rgba(18, 20, 24, 0.7);
+  --glass-line: rgba(255, 255, 255, 0.08);
+  --ring: 0 0 0 3px rgba(200, 247, 81, 0.2);
+
+  --f-display-weight: 650;
+  --f-display-tracking: -0.045em;
+  --eyebrow-tracking: 0.22em;
+
+  --w-container: 1180px;
+  --gap-section: 88px;
+
+  --dur: 240ms;
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --img-filter: brightness(0.78) contrast(1.2) saturate(0.9);
+  --img-filter-hover: brightness(1) contrast(1.08) saturate(1.05);
+  --deco-opacity: 1;
+  --grain-opacity: 0.035;
+}
+
+/* --- STUDIO: светлый минимализм -------------------------------
+   Почти белый с тёплым подтоном, глубокий синий акцент,
+   мягкая градиентная дымка. Много воздуха, крупная типографика. */
+[data-theme="studio"] {
+  --c-bg: #fbfbfa;
+  --c-surface: #f2f2f0;
+  --c-elevated: #ffffff;
+  --c-line: #e4e4e1;
+  --c-ink: #0f1113;
+  --c-muted: #6b6f76;
+  --c-accent: #2b59ff;
+  --c-accent-2: #6b7bff;
+  --c-accent-ink: #ffffff;
+
+  --r-card: 26px;
+  --r-control: 14px;
+
+  /* Тень многослойная и почти незаметная: глубину даёт
+     белая карточка на сером, а не затемнение под ней */
+  --sh-soft: 0 1px 2px rgba(15, 17, 19, 0.03), 0 4px 12px -6px rgba(15, 17, 19, 0.06),
+    0 16px 32px -20px rgba(15, 17, 19, 0.16);
+  --sh-lift: 0 2px 4px rgba(15, 17, 19, 0.04), 0 12px 24px -10px rgba(15, 17, 19, 0.1),
+    0 32px 60px -28px rgba(43, 89, 255, 0.24);
+
+  --glass-bg: rgba(251, 251, 250, 0.75);
+  --glass-line: rgba(15, 17, 19, 0.06);
+  --ring: 0 0 0 3px rgba(43, 89, 255, 0.16);
+
+  --f-display-weight: 600;
+  --f-display-tracking: -0.04em;
+  --eyebrow-tracking: 0.02em;
+
+  --w-container: 1080px;
+  --gap-section: 92px;
+
+  --dur: 320ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --img-filter: saturate(1.02);
+  --img-filter-hover: saturate(1.08);
+  --deco-opacity: 1;
+  --grain-opacity: 0.02;
+}
+
+/* --- SIGNAL: индустриальный контраст --------------------------
+   Тёплый бетон, сигнальный оранжевый, острая геометрия.
+   Прямые углы и плотная сетка — язык дорожной разметки. */
+[data-theme="signal"] {
+  --c-bg: #f7f5f2;
+  --c-surface: #ebe7e1;
+  --c-elevated: #ffffff;
+  --c-line: #d8d2c9;
+  --c-ink: #17150f;
+  --c-muted: #6f695e;
+  --c-accent: #ff5a1f;
+  --c-accent-2: #ff8a3d;
+  --c-accent-ink: #ffffff;
+
+  /* Почти прямые углы: в этом стиле скругления гасят характер */
+  --r-card: 6px;
+  --r-control: 4px;
+
+  --sh-soft: 0 1px 2px rgba(23, 21, 15, 0.05), 0 10px 24px -18px rgba(23, 21, 15, 0.4);
+  --sh-lift: 0 2px 4px rgba(23, 21, 15, 0.07), 0 20px 40px -22px rgba(255, 90, 31, 0.45);
+
+  --glass-bg: rgba(247, 245, 242, 0.78);
+  --glass-line: rgba(23, 21, 15, 0.08);
+  --ring: 0 0 0 3px rgba(255, 90, 31, 0.2);
+
+  --f-display-weight: 700;
+  --f-display-tracking: -0.035em;
+  --eyebrow-tracking: 0.3em;
+
+  --w-container: 1160px;
+  --gap-section: 84px;
+
+  --dur: 200ms;
+  --ease: cubic-bezier(0.4, 0, 0.1, 1);
+
+  --img-filter: contrast(1.08) saturate(1.04);
+  --img-filter-hover: contrast(1.02) saturate(1.1);
+  --deco-opacity: 1;
+  --grain-opacity: 0.03;
+}
+
+@media (min-width: 768px) {
+  [data-theme="carbon"] { --gap-section: 132px; }
+  [data-theme="studio"] { --gap-section: 140px; }
+  [data-theme="signal"] { --gap-section: 124px; }
+}
+
+/* ============================================================
+   СЛОЙ 2 — БАЗА
+   ============================================================ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 76px;
+  }
+
+  body {
+    background: var(--c-bg);
+    color: var(--c-ink);
+    font-family: var(--f-body);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  /* 16px — иначе Safari на iOS зумит страницу при фокусе в поле */
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 16px;
+    font-family: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--c-ink);
+    color: var(--c-bg);
+  }
+}
+
+@layer utilities {
+  /* горизонтальные ленты карточек на мобиле */
+  .rail {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(var(--pad-x) * -1);
+    padding-inline: var(--pad-x);
+    padding-bottom: 4px;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  .rail > * {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+  }
+
+  /* безопасные зоны iPhone */
+  .safe-b {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+
+/* ============================================================
+   СЛОЙ 3 — ХАРАКТЕР ТЕМЫ
+   ============================================================ */
+
+/* --- Фоновый слой ---
+   Два слоя: цветная дымка и зерно поверх неё. Зерно важнее,
+   чем кажется: чистый градиент выглядит как заливка в редакторе,
+   а лёгкий шум читается как материал. */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::before {
+  opacity: var(--deco-opacity);
+}
+
+body::after {
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* CARBON: холодное свечение сверху и тёплый отсвет снизу */
+[data-theme="carbon"] body::before {
+  background:
+    radial-gradient(52% 38% at 78% -6%, rgba(200, 247, 81, 0.11), transparent 68%),
+    radial-gradient(46% 34% at 8% 104%, rgba(125, 232, 138, 0.08), transparent 70%);
+}
+
+/* STUDIO: мягкая дымка, почти незаметная */
+[data-theme="studio"] body::before {
+  background:
+    radial-gradient(48% 34% at 84% 2%, rgba(43, 89, 255, 0.07), transparent 70%),
+    radial-gradient(40% 30% at 4% 92%, rgba(107, 123, 255, 0.06), transparent 72%);
+}
+
+/* SIGNAL: диагональная разметка и тёплый отсвет */
+[data-theme="signal"] body::before {
+  background-image:
+    radial-gradient(46% 30% at 92% 0%, rgba(255, 90, 31, 0.09), transparent 70%),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(23, 21, 15, 0.022) 0 1px,
+      transparent 1px 26px
+    );
+}
+
+/* Админка — рабочий инструмент, декор там мешает */
+body:has(.admin-root)::before,
+body:has(.admin-root)::after {
+  display: none;
+}
+
+/* --- Типографика --- */
+h1,
+h2,
+h3 {
+  font-weight: var(--f-display-weight);
+  letter-spacing: var(--f-display-tracking);
+  /* Оптический кернинг: на крупных кеглях заметно подтягивает пары */
+  font-kerning: normal;
+  text-wrap: balance;
+}
+
+[data-theme] .uppercase {
+  letter-spacing: var(--eyebrow-tracking);
+}
+
+/* Цифры в прайсе выравниваются по разрядам, иначе колонка «пляшет» */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* SIGNAL: капслок в заголовках секций — язык дорожных знаков */
+[data-theme="signal"] main h2 {
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 5.5vw, 2.5rem);
+}
+
+/* STUDIO: заголовки крупнее и по центру — приём продуктовых страниц */
+[data-theme="studio"] main section > div > header {
+  text-align: center;
+  margin-inline: auto;
+}
+
+[data-theme="studio"] main .uppercase {
+  text-transform: none;
+  color: var(--c-accent);
+  font-weight: 500;
+}
+
+/* CARBON: акцентная линия слева, как индикатор на панели */
+[data-theme="carbon"] main section > div > header {
+  border-left: 2px solid var(--c-accent);
+  padding-left: 20px;
+}
+
+/* --- Главная кнопка ---
+   Градиент вместо плоской заливки: одна из самых заметных примет
+   современного интерфейса и самая дешёвая по трудозатратам. */
+main .bg-accent:not(.no-grad),
+[role="dialog"] .bg-accent:not(.no-grad) {
+  background-image: var(--grad-accent);
+}
+
+/* --- Стеклянные панели ---
+   Липкие блоки: навбар, бегущий итог калькулятора, нижняя панель.
+   Полупрозрачность здесь функциональна — видно, что контент продолжается. */
+header.fixed,
+.safe-b.fixed,
+#calculator .sticky > div {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+  border-color: var(--glass-line);
+}
+
+/* --- Микровзаимодействия --- */
+@media (hover: hover) {
+  main .rounded-card {
+    transition:
+      transform var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+
+  main .rounded-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sh-lift);
+  }
+
+  main a:hover img,
+  main button:hover img {
+    filter: var(--img-filter-hover);
+  }
+}
+
+/* Нажатие всегда даёт отклик: без него на телефоне непонятно,
+   попал палец по кнопке или нет */
+button:active {
+  transform: scale(0.985);
+}
+
+main img,
+footer img {
+  filter: var(--img-filter);
+  transition: filter var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+/* Активные элементы получают кольцо вместо утолщённой рамки:
+   рамка сдвигает содержимое на пиксель, кольцо — нет */
+.border-ink {
+  box-shadow: var(--ring);
+}
+
+/* --- Форма записи и калькулятор ---
+   Считают деньги: никаких фильтров на фото и подъёмов карточек,
+   чтобы ничто не отвлекало от цифр. */
+#booking img,
+#calculator img,
+[role="dialog"] img {
+  filter: none !important;
+}
+
+#booking .rounded-card:hover,
+#calculator .rounded-card:hover,
+[role="dialog"] .rounded-card:hover {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none !important;
+  }
+
+  button:active {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

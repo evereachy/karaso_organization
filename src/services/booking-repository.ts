@@ -1,0 +1,108 @@
+import { collections, ensureIndexes, getDb, isMongoEnabled } from "@/lib/mongodb";
+import type { BookingPayload, BookingRecord } from "@/types";
+
+/**
+ * Контракт хранилища записей.
+ * Реализаций две: MongoDB (когда задан MONGODB_URI) и память процесса —
+ * чтобы демо можно было показать клиенту без поднятой базы.
+ */
+export interface BookingRepository {
+  create(payload: BookingPayload): Promise<BookingRecord>;
+  listByDate(dateISO: string): Promise<BookingRecord[]>;
+  listAll(limit?: number): Promise<BookingRecord[]>;
+  setStatus(id: string, status: BookingRecord["status"]): Promise<BookingRecord | null>;
+}
+
+function newRecord(payload: BookingPayload): BookingRecord {
+  return {
+    ...payload,
+    id: `BK-${Date.now().toString(36).toUpperCase()}`,
+    createdAt: new Date().toISOString(),
+    status: "new",
+  };
+}
+
+/* ------------------------------- MongoDB -------------------------------- */
+
+const mongoRepository: BookingRepository = {
+  async create(payload) {
+    await ensureIndexes();
+    const db = await getDb();
+    const record = newRecord(payload);
+
+    // Фото не кладём в документ: 3 картинки по 400 КБ в base64 упрутся
+    // в лимит документа 16 МБ и раздуют выдачу списка записей в админке.
+    // Они уже ушли в Telegram; для продакшена — S3 и ссылка здесь.
+    const { photos, ...rest } = record;
+    await db.collection(collections.bookings).insertOne({
+      ...rest,
+      photoCount: photos.length,
+    });
+
+    return record;
+  },
+
+  async listByDate(dateISO) {
+    const db = await getDb();
+    return db
+      .collection<BookingRecord>(collections.bookings)
+      .find({ date: dateISO }, { projection: { _id: 0 } })
+      .sort({ time: 1 })
+      .toArray();
+  },
+
+  async listAll(limit = 500) {
+    const db = await getDb();
+    return db
+      .collection<BookingRecord>(collections.bookings)
+      .find({}, { projection: { _id: 0 } })
+      .sort({ date: 1, time: 1 })
+      .limit(limit)
+      .toArray();
+  },
+
+  async setStatus(id, status) {
+    const db = await getDb();
+    const res = await db
+      .collection<BookingRecord>(collections.bookings)
+      .findOneAndUpdate(
+        { id },
+        { $set: { status } },
+        { returnDocument: "after", projection: { _id: 0 } },
+      );
+    return res ?? null;
+  },
+};
+
+/* -------------------------------- Память -------------------------------- */
+
+const memory: BookingRecord[] = [];
+
+export const inMemoryRepository: BookingRepository = {
+  async create(payload) {
+    const record = newRecord(payload);
+    memory.push(record);
+    return record;
+  },
+
+  async listByDate(dateISO) {
+    return memory.filter((b) => b.date === dateISO);
+  },
+
+  async listAll(limit = 500) {
+    return [...memory]
+      .sort((a, b) => (a.date + a.time < b.date + b.time ? -1 : 1))
+      .slice(0, limit);
+  },
+
+  async setStatus(id, status) {
+    const record = memory.find((b) => b.id === id);
+    if (!record) return null;
+    record.status = status;
+    return record;
+  },
+};
+
+export const bookingRepository: BookingRepository = isMongoEnabled
+  ? mongoRepository
+  : inMemoryRepository;
