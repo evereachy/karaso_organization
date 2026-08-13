@@ -5,6 +5,7 @@ import { pageBlocks } from "@/config/blocks";
 import { AvailabilityProvider } from "@/features/booking/AvailabilityProvider";
 import { BookingProvider } from "@/features/booking/BookingProvider";
 import { BookingSheet } from "@/features/booking/BookingSheet";
+import { IntroDrive } from "@/components/ui/IntroDrive";
 
 /**
  * Страница ничего не верстает. Она только собирает блоки из конфига
@@ -14,6 +15,9 @@ export default function HomePage() {
   return (
     <AvailabilityProvider>
       <BookingProvider>
+      {/* Заставка поверх готовой страницы: контент есть в HTML сразу */}
+      <IntroDrive />
+
       <Navbar />
 
       <main>
