@@ -31,7 +31,7 @@ export const services: Service[] = [
     currency: "Kč",
     description: "Считываем ошибки, проверяем узлы, объясняем на понятном языке.",
     image:
-      "https://images.unsplash.com/photo-1632823471565-1ecdf5e63d64?auto=format&fit=crop&w=800&q=70",
+      "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=70",
     // Сканер работает одинаково на любой машине — множитель тут был бы обманом
     flatRate: true,
     variants: [

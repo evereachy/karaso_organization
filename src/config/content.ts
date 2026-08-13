@@ -70,7 +70,7 @@ export const faq: FaqItem[] = [
 
 export const gallery: GalleryItem[] = [
   { id: "g1", src: "https://images.unsplash.com/photo-1625047509168-a7026f36de04?auto=format&fit=crop&w=700&q=70", alt: "Ремонтная зона" },
-  { id: "g2", src: "https://images.unsplash.com/photo-1632823471565-1ecdf5e63d64?auto=format&fit=crop&w=700&q=70", alt: "Компьютерная диагностика" },
+  { id: "g2", src: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=70", alt: "Компьютерная диагностика" },
   { id: "g3", src: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=700&q=70", alt: "Работа с двигателем" },
   { id: "g4", src: "https://images.unsplash.com/photo-1607603750909-408e193868c7?auto=format&fit=crop&w=700&q=70", alt: "Шиномонтаж" },
   { id: "g5", src: "https://images.unsplash.com/photo-1600661653561-629509216228?auto=format&fit=crop&w=700&q=70", alt: "Тормозная система" },
